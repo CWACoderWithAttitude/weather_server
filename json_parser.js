@@ -41,12 +41,25 @@ var getMinTemp = function(){
   return data.reduce((min, p) => p.temp < min ? p.temp:min, data[0].temp);
 };
 
+var getMaxHum = function(){
+  var data = getWeatherJson();
+  return data.reduce((max, p) => p.hum > max ? p.hum:max, data[0].hum);
+};
+
+var getMinHum = function(){
+  var data = getWeatherJson();
+  return data.reduce((min, p) => p.hum < min ? p.hum:min, data[0].hum);
+};
+
 //getWeatherJson();
 //getLatestWeatherData();
 console.log('Latest Temp: ' + getLatestTemp());
 console.log('Latest Humidity: ' + getLatestHum());
 console.log('max temp: ' + getMaxTemp());
 console.log('min temp: ' + getMinTemp());
+
+console.log('max hum: ' + getMaxHum());
+console.log('min hum: ' + getMinHum());
 
 module.exports = {
   getLatestHum,
