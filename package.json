@@ -1,0 +1,19 @@
+{
+  "name": "weather_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node weather_server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "koa": "^2.11.0",
+    "koa-pug": "^4.0.2",
+    "koa-router": "^7.4.0",
+    "pug": "^2.0.4"
+  }
+}
