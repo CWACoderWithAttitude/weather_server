@@ -33,3 +33,9 @@ var getLatestHum = function(){
 getLatestWeatherData();
 console.log('Latest Temp: ' + getLatestTemp());
 console.log('Latest Humidity: ' + getLatestHum());
+
+module.exports = {
+  getLatestHum,
+  getLatestTemp,
+  getLatestWeatherData
+}
