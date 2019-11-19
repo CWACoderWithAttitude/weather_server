@@ -29,13 +29,29 @@ var getLatestHum = function(){
   var latest = getLatestWeatherData();
   return latest.hum;
 };
+
+//https://codeburst.io/javascript-finding-minimum-and-maximum-values-in-an-array-of-objects-329c5c7e22a2
+var getMaxTemp = function(){
+  var data = getWeatherJson();
+  return data.reduce((max, p) => p.temp > max ? p.temp:max, data[0].temp);
+};
+
+var getMinTemp = function(){
+  var data = getWeatherJson();
+  return data.reduce((min, p) => p.temp < min ? p.temp:min, data[0].temp);
+};
+
 //getWeatherJson();
-getLatestWeatherData();
+//getLatestWeatherData();
 console.log('Latest Temp: ' + getLatestTemp());
 console.log('Latest Humidity: ' + getLatestHum());
+console.log('max temp: ' + getMaxTemp());
+console.log('min temp: ' + getMinTemp());
 
 module.exports = {
   getLatestHum,
   getLatestTemp,
-  getLatestWeatherData
+  getLatestWeatherData,
+  getMaxTemp,
+  getMinTemp
 }
