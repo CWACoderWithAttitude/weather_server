@@ -20,8 +20,17 @@ app.get('/weather', function (req, res) {
 
 app.get('/waterfall1', function (req, res) {
   var raw = fs.readFileSync(data_file);
+  var weatherJson = JSON.parse(raw);
   res.render('waterfall1', { title: 'Hey', message: 'Hello there!'});
   //res.send('Weather 2\n'+raw);
+});
+
+app.get('/latest', function (req, res) {
+  var raw = fs.readFileSync(data_file);
+  var weatherJsonAll = JSON.parse(raw);
+
+  res.render('currentValues', { title: 'Hey', message: 'Hello there!'});
+  //res.send('Weather \n'+raw);
 });
 
 app.listen(3000, function () {
