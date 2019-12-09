@@ -25,16 +25,17 @@ function drawChart(json) {
     minorTicks: 5
   };
   var optionsTemp = {
-    max: 40,
+    min: -20,
+    max: 50,
     width: 800, height: 240,
-    redFrom: 90, redTo: 100,
-    yellowFrom:75, yellowTo: 90,
+    redFrom: 35, redTo: 50,
+    yellowFrom:25, yellowTo: 35,
     minorTicks: 5
   };
 
   var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
 
-  chart.draw(data, options);
+  chart.draw(data, optionsTemp);
   /*
   setInterval(function() {
     data.setValue(0, 1, 40 + Math.round(60 * Math.random()));

@@ -14,12 +14,33 @@ var getWeatherJson = function(){
 
 var getLatestWeatherData = function(){
   var json = getWeatherJson();
-  var count = json.length;
+  var count = json.length;0
   var latest = json[count-1];
   //console.log('latest: ' + JSON.stringify(latest));
   return latest;
 };
 
+var getLatestForSensor = function(sensorId){
+  const weatherJson = getWeatherJson().count;
+  const count = weatherJson.count;
+  for (i=1; i<count; i++){
+    const json = weatherJson[count-i];
+    if (json.mac.includes(sensorId)){
+      return json;
+    }
+  }
+  const now = new Date().toISOString();
+  const defaultWeather = {
+    timestamp_received: now,
+    timestamp: now,
+    
+  };
+  return
+}
+const getLatestTime = function() {
+  const latest = getLatestWeatherData();
+  return latest.timestamp_received;
+}
 var getLatestTemp = function(){
   var latest = getLatestWeatherData();
   return latest.temp;

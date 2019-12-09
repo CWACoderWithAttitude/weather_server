@@ -30,13 +30,17 @@ app.get('/api', function(req, res){
   res.json(getLatestWeatherData());
 });
 
-app.get('/latest', function (req, res) {
+app.get('/all', function (req, res) {
+  var weatherJsonAll = getWeatherData();
+
+  res.json(weatherJsonAll);
+});
+
+const getWeatherData = function(){
   var raw = fs.readFileSync(data_file);
   var weatherJsonAll = JSON.parse(raw);
-
-  res.render('currentValues', { title: 'Hey', message: 'Hello there!'});
-  //res.send('Weather \n'+raw);
-});
+  return weatherJsonAll;
+};
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
