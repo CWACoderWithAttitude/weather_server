@@ -10,11 +10,14 @@ function fetchData(){
 };
 
 function drawChart(json) {
-  console.log(json);
+  console.log('drawChart: ' + JSON.stringify(json));
+  //return;
+  const ts = document.getElementById('timestamp');
+  ts.value = json.timestamp_received;
   var data = google.visualization.arrayToDataTable([
     ['Label', 'Value'],
-    ['Büro / °C', json.temp],
-    ['Luftfeuchte / %', json.hum],
+    ['Büro / °C', json.temperature],
+    ['Luftfeuchte / %', json.humidity],
     ['Draussen', json.ds18b20]
   ]);
 

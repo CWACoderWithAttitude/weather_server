@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>piwik_upgrade</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="piwik-anforderungen">piwik anforderungen</h1>
+<h2 id="pageviews-erfasst-2019">pageviews erfasst 2019</h2>
+<p>vrbp, gesamt 18.000.000 inet: 5.500.000 dzbank.de: 2.100.000 dzbank.com: 250.000 intranet: 95.000</p>
+<p>summe: 25.950.000 pro monat: ~2.100.000</p>
+<p>Empfehlung von <a href="https://matomo.org/docs/requirements/#recommended-servers-sizing-cpu-ram-disks">piwik</a>:</p>
+<pre><code>Tracking 10 million pageviews per month or less
+
+    Two servers recommended
+        1 x App servers, at least 8 CPUs, 8 GB RAM, 100GB SSD disk.
+            Or 2 x App servers, at least 4 CPUs, 4 GB RAM, 100GB SSD disk.
+        1 x Database server, at least 8 CPUs, 16 GB RAM, 400GB SSD disk.</code></pre>
+</body>
+</html>
