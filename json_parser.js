@@ -3,12 +3,74 @@
 //
 const data_file = '../../../microservices/node_mqtt_listener/weather_data.json';
 const fs = require('fs');
+const fetcher = ('./fetcher');
+const config = require('./config');
+const axios = require('axios');
+const debug = false;
+// https://flaviocopes.com/axios/
+const getWeatherDataFromAWS = async() => {
+  try{
+    return await axios.get(config.url);
+  }catch(error){
+    console.log('error fetching data: ' + error);
+  }
+};
+
+
+const countEntries = async () => {
+  const entries = await getWeatherDataFromAWS()
+  const envdata = entries.data.envdata;
+
+  if (entries.data.envdata) {
+    if (debug){
+      console.log(`Got ${Object.entries(entries.data.envdata).length} entries`)
+    }
+  }
+
+  var filteredData = await filterData(envdata);
+
+
+var sortedEnvData = filteredData.sort(function(a, b){
+  return a.timestamp_received - b.timestamp_received;
+});
+if (debug){
+  console.log('first: ' + JSON.stringify(sortedEnvData[0], ' ', 4));
+  console.log('latest: ' + JSON.stringify(sortedEnvData[sortedEnvData.length-1], ' ', 4));
+}
+//  return sortedEnvData[sortEnvData.length-1];
+
+}
+
+const filterData = async (data) => {
+  try {
+    var filteredData = await data.filter(entry => Object.keys(entry).length == 5);
+    if (debug){
+      console.log('filterData: result: ' + filteredData.length);
+      console.log('filterData: ' + JSON.stringify(filteredData, ' ', 4) + '\n-------------');
+    }
+    return filteredData;
+  }catch(e){
+    console.log('filterData: problem: ' + e);
+    console.log('filterData: problem: ' + JSON.stringify(e));
+  }
+};
+
+const sortEnvData = async (envData) => {
+  console.log(envData);
+  /*
+  return await envData.sort(function(a, b){
+    return a.timestamp_received - b.timestamp_received;
+  });
+  */
+  return envData;
+};
 
 var getWeatherJson = function(){
   var raw = fs.readFileSync(data_file);
-  //console.log('raw: ' + raw);
+  //var raw = getWeatherDataFromAWS();
+  console.log('raw: ' + raw);
   var json = JSON.parse(raw);
-  //console.log('json: ' + json);
+  console.log('json: ' + JSON.stringify(json, '  ', 2));
   return json;
 };
 
@@ -33,7 +95,7 @@ var getLatestForSensor = function(sensorId){
   const defaultWeather = {
     timestamp_received: now,
     timestamp: now,
-    
+
   };
   return
 }
@@ -72,8 +134,11 @@ var getMinHum = function(){
   return data.reduce((min, p) => p.hum < min ? p.hum:min, data[0].hum);
 };
 
+countEntries();
+//getWeatherDataFromAWS();
 //getWeatherJson();
 //getLatestWeatherData();
+/*
 console.log('Latest Temp: ' + getLatestTemp());
 console.log('Latest Humidity: ' + getLatestHum());
 console.log('max temp: ' + getMaxTemp());
@@ -81,11 +146,15 @@ console.log('min temp: ' + getMinTemp());
 
 console.log('max hum: ' + getMaxHum());
 console.log('min hum: ' + getMinHum());
+*/
 
 module.exports = {
   getLatestHum,
   getLatestTemp,
   getLatestWeatherData,
+  getWeatherDataFromAWS,
+  countEntries,
+  sortEnvData,
   getMaxTemp,
   getMinTemp
 }
