@@ -6,7 +6,7 @@ const fs = require('fs');
 const fetcher = ('./fetcher');
 const config = require('./config');
 const axios = require('axios');
-
+const debug = false;
 // https://flaviocopes.com/axios/
 const getWeatherDataFromAWS = async() => {
   try{
@@ -16,29 +16,55 @@ const getWeatherDataFromAWS = async() => {
   }
 };
 
+
 const countEntries = async () => {
   const entries = await getWeatherDataFromAWS()
   const envdata = entries.data.envdata;
 
   if (entries.data.envdata) {
-    console.log(`Got ${Object.entries(entries.data.envdata).length} entries`)
-  }
-/*
-  var latest = envdata[0];
-  envdata.forEach(element => {
-    if (element.timestamp_received && element.timestamp_received > latest.timestamp_received){
-      latest = element;
+    if (debug){
+      console.log(`Got ${Object.entries(entries.data.envdata).length} entries`)
     }
-  });
-*/
-envdata.sort(function(a, b){
+  }
+
+  var filteredData = await filterData(envdata);
+
+
+var sortedEnvData = filteredData.sort(function(a, b){
   return a.timestamp_received - b.timestamp_received;
 });
-  console.log('first: ' + JSON.stringify(envdata[0], ' ', 2));
-  console.log('latest: ' + JSON.stringify(envdata[envdata.length-1], ' ', 2));
-  return envdata[envdata.length-1];
+if (debug){
+  console.log('first: ' + JSON.stringify(sortedEnvData[0], ' ', 4));
+  console.log('latest: ' + JSON.stringify(sortedEnvData[sortedEnvData.length-1], ' ', 4));
+}
+//  return sortedEnvData[sortEnvData.length-1];
 
 }
+
+const filterData = async (data) => {
+  try {
+    var filteredData = await data.filter(entry => Object.keys(entry).length == 5);
+    if (debug){
+      console.log('filterData: result: ' + filteredData.length);
+      console.log('filterData: ' + JSON.stringify(filteredData, ' ', 4) + '\n-------------');
+    }
+    return filteredData;
+  }catch(e){
+    console.log('filterData: problem: ' + e);
+    console.log('filterData: problem: ' + JSON.stringify(e));
+  }
+};
+
+const sortEnvData = async (envData) => {
+  console.log(envData);
+  /*
+  return await envData.sort(function(a, b){
+    return a.timestamp_received - b.timestamp_received;
+  });
+  */
+  return envData;
+};
+
 var getWeatherJson = function(){
   var raw = fs.readFileSync(data_file);
   //var raw = getWeatherDataFromAWS();
@@ -108,7 +134,8 @@ var getMinHum = function(){
   return data.reduce((min, p) => p.hum < min ? p.hum:min, data[0].hum);
 };
 
-getWeatherDataFromAWS();
+countEntries();
+//getWeatherDataFromAWS();
 //getWeatherJson();
 //getLatestWeatherData();
 /*
@@ -120,12 +147,14 @@ console.log('min temp: ' + getMinTemp());
 console.log('max hum: ' + getMaxHum());
 console.log('min hum: ' + getMinHum());
 */
+
 module.exports = {
   getLatestHum,
   getLatestTemp,
   getLatestWeatherData,
   getWeatherDataFromAWS,
   countEntries,
+  sortEnvData,
   getMaxTemp,
   getMinTemp
 }

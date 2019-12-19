@@ -35,6 +35,7 @@ app.get('/current', function (req, res) {
 app.get('/api', async function(req, res){
   //res.json(getLatestWeatherData());
   const weather = await countEntries(); //getWeatherDataEntrieFromAWS(); //getWeatherDataFromAWS();
+  const result = weather.filter(w => w.keys.length == 5);
   res.json(weather)
 });
 
