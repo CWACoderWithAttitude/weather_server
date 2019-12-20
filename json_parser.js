@@ -16,6 +16,11 @@ const getWeatherDataFromAWS = async() => {
   }
 };
 
+const getDate = function(){
+    const time = new Date().toISOString();
+    const x = time.substring(0, time.indexOf('T'));
+    return x;
+}
 
 const countEntries = async () => {
   const entries = await getWeatherDataFromAWS()
@@ -30,14 +35,14 @@ const countEntries = async () => {
   var filteredData = await filterData(envdata);
 
 
-var sortedEnvData = filteredData.sort(function(a, b){
-  return a.timestamp_received - b.timestamp_received;
-});
-if (debug){
-  console.log('first: ' + JSON.stringify(sortedEnvData[0], ' ', 4));
-  console.log('latest: ' + JSON.stringify(sortedEnvData[sortedEnvData.length-1], ' ', 4));
-}
-//  return sortedEnvData[sortEnvData.length-1];
+    var sortedEnvData = filteredData.sort(function(a, b){
+        return a.timestamp_received - b.timestamp_received;
+    });
+    if (debug){
+        console.log('first: ' + JSON.stringify(sortedEnvData[0], ' ', 4));
+        console.log('latest: ' + JSON.stringify(sortedEnvData[sortedEnvData.length-1], ' ', 4));
+    }
+    return sortedEnvData[sortEnvData.length-1];
 
 }
 
@@ -149,6 +154,7 @@ console.log('min hum: ' + getMinHum());
 */
 
 module.exports = {
+    getDate,
   getLatestHum,
   getLatestTemp,
   getLatestWeatherData,

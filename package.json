@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jasmine",
     "server": "node weather_server.js",
-    "start": "node weather_server.js"
+    "start": "node weather_server.js",
+    "dev": "nodemon weather_server.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "pug": "^2.0.4"
   },
   "devDependencies": {
-    "jasmine": "^3.5.0"
+    "jasmine": "^3.5.0",
+    "nodemon": "^2.0.2"
   }
 }
