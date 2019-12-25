@@ -18,10 +18,50 @@ const getWeatherDataFromAWS = async() => {
 
 const getDate = function(){
     const time = new Date().toISOString();
+    console.log('getDate: time: ' + time);
     const x = time.substring(0, time.indexOf('T'));
+    console.log('getDate: x: ' + x);
     return x;
 }
 
+const getTodaysData = async() => {
+    console.log ('1');
+    const entries = await getWeatherDataFromAWS();
+    //console.log ('2 - entries: ' + entries.data);
+    const envdata = entries.data.envdata;
+    return envdata;
+    const filtered = filterData(envdata);
+    const i = filtered.length
+    console.log ('2.1 - entries: ' + i);
+    const lastItem = filtered[i-1];
+    console.log ('2.1 - entries: ' + JSON.stringify(lastItem));
+    const today = getDate();
+    var result = [];
+    for (var e in filtered){
+        if (e.timestamp_received.substring(today) > 0){
+            result.push(e);
+        }
+    }
+  return result;
+  console.log('getTodaysData: entries: ' + JSON.stringify(entries.data));
+  var result = [];
+  for (e in envdata){
+      console.log('e: ' + JSON.stringify(e));
+      console.log('e: ' + e);
+      if (envdata.timestamp_received.startsWith(getDate())){
+          result.push(e);
+      }
+  }
+
+  
+  console.log ('3');
+  if (entries.data.envdata) {
+    if (debug){
+      console.log(`Got ${Object.entries(entries.data.envdata).length} entries`)
+    }
+  }
+  return result;
+} 
 const countEntries = async () => {
   const entries = await getWeatherDataFromAWS()
   const envdata = entries.data.envdata;
@@ -48,7 +88,7 @@ const countEntries = async () => {
 
 const filterData = async (data) => {
   try {
-    var filteredData = await data.filter(entry => Object.keys(entry).length == 5);
+    var filteredData = await data.filter(entry => Object.keys(entry).length >=5);
     if (debug){
       console.log('filterData: result: ' + filteredData.length);
       console.log('filterData: ' + JSON.stringify(filteredData, ' ', 4) + '\n-------------');
@@ -60,14 +100,19 @@ const filterData = async (data) => {
   }
 };
 
+/**
+ * Sort data by time, ascending.
+ * https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/
+ * https://codepen.io/volkerbenders/pen/rNawYzN
+ * @param {
+ * } envData 
+ */
 const sortEnvData = async (envData) => {
-  console.log(envData);
-  /*
   return await envData.sort(function(a, b){
-    return a.timestamp_received - b.timestamp_received;
+    //return a.timestamp_received - b.timestamp_received;
+    if (new Date(a.timestamp).getTime() > new Date(b.timestamp).getTime()) return 1; 
+    if (new Date(b.timestamp).getTime() > new Date(a.timestamp).getTime()) return -1;
   });
-  */
-  return envData;
 };
 
 var getWeatherJson = function(){
@@ -140,6 +185,7 @@ var getMinHum = function(){
 };
 
 countEntries();
+
 //getWeatherDataFromAWS();
 //getWeatherJson();
 //getLatestWeatherData();
@@ -155,6 +201,7 @@ console.log('min hum: ' + getMinHum());
 
 module.exports = {
     getDate,
+    getTodaysData,
   getLatestHum,
   getLatestTemp,
   getLatestWeatherData,
@@ -162,5 +209,6 @@ module.exports = {
   countEntries,
   sortEnvData,
   getMaxTemp,
-  getMinTemp
+  getMinTemp,
+  filterData
 }

@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 const data_file = '../../../microservices/node_mqtt_listener/weather_data.json';
 const fs = require('fs');
-var {getWeatherDataFromAWS, countEntries, getLatestWeatherData, getLatestHum, getLatestTemp} = require('./json_parser');
+var {getTodaysData, getWeatherDataFromAWS, countEntries, getLatestWeatherData, getLatestHum, getLatestTemp} = require('./json_parser');
 
 app.set('views', './views')
 app.set('view engine', 'pug');
@@ -19,12 +19,10 @@ app.get('/weather', function (req, res) {
   //res.send('Weather 2\n'+raw);
 });
 
-app.get('/waterfall1', function (req, res) {
-  var raw = fs.readFileSync(data_file);
-  var weatherJson = JSON.parse(raw);
-  res.render('waterfall1', { title: 'Hey', message: 'Hello there!'});
-  //res.send('Weather 2\n'+raw);
-});
+app.get('/today', async function(req, res){
+    const weather = await getTodaysData();
+    res.json(weather)
+  });
 app.get('/current', function (req, res) {
   //var raw = fs.readFileSync(data_file);
   //var weatherJson = JSON.parse(raw);
