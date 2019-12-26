@@ -7,7 +7,7 @@
     "test": "jasmine",
     "server": "node weather_server.js",
     "start": "node weather_server.js",
-    "dev": "nodemon weather_server.js"
+    "dev": "npm test && nodemon weather_server.js"
   },
   "author": "",
   "license": "ISC",
